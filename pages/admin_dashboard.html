@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel de administración de La Desesperanza - Gestión completa de inventario, ventas y análisis de negocio">
+    <title>Panel de Administración - La Desesperanza</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fladesespe7587back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.10"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+  </head>
+<body class="bg-background">
+    <!-- Admin Navigation Header -->
+    <header class="bg-primary border-b-3 border-primary sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo & Admin Badge -->
+                <div class="flex items-center gap-4">
+                    <a href="../landing_page.html" class="flex items-center gap-3 hover-lift">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="48" height="48" fill="#E8FF00"/>
+                            <path d="M24 8L32 16H28V24H20V16H16L24 8Z" fill="#0A0A0A"/>
+                            <circle cx="24" cy="32" r="6" fill="#0A0A0A"/>
+                            <rect x="12" y="38" width="24" height="2" fill="#0A0A0A"/>
+                        </svg>
+                        <div>
+                            <h1 class="font-heading text-xl font-semibold text-secondary tracking-tight">LA DESESPERANZA</h1>
+                            <p class="font-mono text-xs text-accent uppercase tracking-wider">Panel Administrativo</p>
+                        </div>
+                    </a>
+                    
+                    <div class="hidden md:flex items-center gap-2 bg-accent px-3 py-1 border-3 border-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="3">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        <span class="font-mono text-xs font-semibold text-primary uppercase">Administrador</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="../product_catalog.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Catálogo</a>
+                    <a href="../shopping_cart.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Carrito</a>
+                    <button id="logoutBtn" class="btn-secondary text-xs">Cerrar Sesión</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-secondary p-2" aria-label="Abrir menú de navegación">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t-3 border-secondary-dark pt-4">
+                <div class="flex flex-col gap-4">
+                    <a href="../product_catalog.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Catálogo</a>
+                    <a href="../shopping_cart.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Carrito</a>
+                    <button id="mobileLogoutBtn" class="btn-secondary text-xs text-center">Cerrar Sesión</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Dashboard Container -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Dashboard Header -->
+        <section class="mb-8 scroll-reveal">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <h2 class="text-headline text-text-primary mb-2">Panel de Control</h2>
+                    <p class="font-body text-text-secondary">Resumen general del negocio - Actualizado: <span id="lastUpdate" class="font-mono text-accent">03/12/2025 20:48</span></p>
+                </div>
+                
+                <!-- Date Filter Controls -->
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 bg-surface border-3 border-primary px-4 py-2 shadow-editorial">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.5">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        <select id="dateFilter" class="font-mono text-sm text-text-primary bg-transparent border-none outline-none cursor-pointer">
+                            <option value="today">Hoy</option>
+                            <option value="week" selected>Esta Semana</option>
+                            <option value="month">Este Mes</option>
+                            <option value="year">Este Año</option>
+                            <option value="custom">Personalizado</option>
+                        </select>
+                    </div>
+                    
+                    <button id="refreshBtn" class="bg-accent text-primary p-2 border-3 border-primary shadow-editorial hover-lift transition-all duration-200" aria-label="Actualizar datos">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Metrics Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Sales Card -->
+            <div class="bg-surface border-3 border-primary shadow-editorial p-6 scroll-reveal hover-lift transition-all duration-200">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="bg-accent p-3 border-3 border-primary">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.5">
+                            <path d="M20 7h-4V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v3H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                            <path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/>
+                        </svg>
+                    </div>
+                    <span class="font-mono text-xs text-success uppercase tracking-wide">+12.5%</span>
+                </div>
+                <h3 class="font-mono text-sm text-text-secondary uppercase tracking-wide mb-2">Ventas Totales</h3>
+                <p class="font-mono text-3xl font-semibold text-text-primary mb-1" id="totalSales">847</p>
+                <p class="font-body text-xs text-text-secondary">Esta semana</p>
+            </div>
+
+            <!-- Revenue Card -->
+            <div class="bg-surface border-3 border-primary shadow-editorial p-6 scroll-reveal stagger-1 hover-lift transition-all duration-200">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="bg-accent-cart p-3 border-3 border-primary">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.5">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <span class="font-mono text-xs text-success uppercase tracking-wide">+18.2%</span>
+                </div>
+                <h3 class="font-mono text-sm text-text-secondary uppercase tracking-wide mb-2">Ingresos</h3>
+                <p class="font-mono text-3xl font-semibold text-text-primary mb-1" id="totalRevenue">$72,450.00</p>
+                <p class="font-body text-xs text-text-secondary">MXN esta semana</p>
+            </div>
+
+            <!-- Active Products Card -->
+            <div class="bg-surface border-3 border-primary shadow-editorial p-6 scroll-reveal stagger-2 hover-lift transition-all duration-200">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="bg-accent-account p-3 border-3 border-primary">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.5">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                        </svg>
+                    </div>
+                    <span class="font-mono text-xs text-warning uppercase tracking-wide">3 Bajo Stock</span>
+                </div>
+                <h3 class="font-mono text-sm text-text-secondary uppercase tracking-wide mb-2">Productos Activos</h3>
+                <p class="font-mono text-3xl font-semibold text-text-primary mb-1" id="activeProducts">48</p>
+                <p class="font-body text-xs text-text-secondary">De 52 totales</p>
+            </div>
+
+            <!-- Customers Card -->
+            <div class="bg-surface border-3 border-primary shadow-editorial p-6 scroll-reveal stagger-3 hover-lift transition-all duration-200">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="bg-accent p-3 border-3 border-primary">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.5">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <span class="font-mono text-xs text-success uppercase tracking-wide">+24 Nuevos</span>
+                </div>
+                <h3 class="font-mono text-sm text-text-secondary uppercase tracking-wide mb-2">Clientes Totales</h3>
+                <p class="font-mono text-3xl font-semibold text-text-primary mb-1" id="totalCustomers">1,284</p>
+                <p class="font-body text-xs text-text-secondary">Usuarios registrados</p>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Sales Chart -->
+            <div class="bg-surface border-3 border-primary shadow-editorial p-6 scroll-reveal">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-heading text-xl font-medium text-text-primary">Ventas por Día</h3>
+                    <button id="exportSalesBtn" class="font-mono text-xs text-accent hover:text-accent-hover uppercase tracking-wide transition-colors duration-200">
+                        Exportar
+                    </button>
+                </div>
+                <div class="relative h-64">
+                    <canvas id="salesChart" aria-label="Gráfico de ventas diarias mostrando tendencias de la última semana"></canvas>
+                </div>
+                <div class="mt-4 pt-4 border-t-3 border-dashed border-border-light">
+                    <div class="flex items-center justify-between">
+                        <span class="font-body text-sm text-text-secondary">Promedio Diario</span>
+                        <span class="font-mono text-lg font-semibold text-text-primary">$10,350.00 MXN</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Sellers Chart -->
+            <div class="bg-surface border-3 border-primary shadow-editorial p-6 scroll-reveal stagger-1">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-heading text-xl font-medium text-text-primary">Productos Más Vendidos</h3>
+                    <button id="exportProductsBtn" class="font-mono text-xs text-accent hover:text-accent-hover uppercase tracking-wide transition-colors duration-200">
+                        Exportar
+                    </button>
+                </div>
+                <div class="relative h-64">
+                    <canvas id="productsChart" aria-label="Gráfico de productos más vendidos mostrando los 5 principales artículos"></canvas>
+                </div>
+                <div class="mt-4 pt-4 border-t-3 border-dashed border-border-light">
+                    <div class="flex items-center justify-between">
+                        <span class="font-body text-sm text-text-secondary">Producto Líder</span>
+                        <span class="font-mono text-lg font-semibold text-text-primary">Pan de Muerto Premium</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions & Alerts -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Quick Actions Panel -->
+            <div class="lg:col-span-2 bg-surface border-3 border-primary shadow-editorial p-6 scroll-reveal">
+                <h3 class="font-heading text-xl font-medium text-text-primary mb-6">Acciones Rápidas</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Product Management -->
+                    <a href="javascript:void(0)" class="group bg-background border-3 border-primary p-6 hover:shadow-editorial-md transition-all duration-200 hover-lift">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-accent p-2 border-3 border-primary group-hover:scale-110 transition-transform duration-200">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.5">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                </svg>
+                            </div>
+                            <span class="font-mono text-xs text-accent uppercase tracking-wide">Gestión</span>
+                        </div>
+                        <h4 class="font-heading text-lg font-medium text-text-primary mb-2">Productos</h4>
+                        <p class="font-body text-sm text-text-secondary mb-4">Administrar inventario y catálogo</p>
+                        <div class="flex items-center gap-2 text-text-primary group-hover:text-accent transition-colors duration-200">
+                            <span class="font-mono text-xs uppercase tracking-wide">Ir al Panel</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </div>
+                    </a>
+
+                    <!-- User Management -->
+                    <a href="javascript:void(0)" class="group bg-background border-3 border-primary p-6 hover:shadow-editorial-md transition-all duration-200 hover-lift">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-accent-cart p-2 border-3 border-primary group-hover:scale-110 transition-transform duration-200">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.5">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                            <span class="font-mono text-xs text-accent-cart uppercase tracking-wide">Gestión</span>
+                        </div>
+                        <h4 class="font-heading text-lg font-medium text-text-primary mb-2">Usuarios</h4>
+                        <p class="font-body text-sm text-text-secondary mb-4">Administrar cuentas de clientes</p>
+                        <div class="flex items-center gap-2 text-text-primary group-hover:text-accent-cart transition-colors duration-200">
+                            <span class="font-mono text-xs uppercase tracking-wide">Ir al Panel</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </div>
+                    </a>
+
+                    <!-- Sales Reports -->
+                    <a href="javascript:void(0)" class="group bg-background border-3 border-primary p-6 hover:shadow-editorial-md transition-all duration-200 hover-lift">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-accent-account p-2 border-3 border-primary group-hover:scale-110 transition-transform duration-200">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2.5">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="10 9 9 9 8 9"/>
+                                </svg>
+                            </div>
+                            <span class="font-mono text-xs text-accent-account uppercase tracking-wide">Reportes</span>
+                        </div>
+                        <h4 class="font-heading text-lg font-medium text-text-primary mb-2">Ventas</h4>
+                        <p class="font-body text-sm text-text-secondary mb-4">Ver reportes detallados</p>
+                        <div class="flex items-center gap-2 text-text-primary group-hover:text-accent-account transition-colors duration-200">
+                            <span class="font-mono text-xs uppercase tracking-wide">Ir al Panel</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Alerts Panel -->
+            <div class="bg-surface border-3 border-primary shadow-editorial p-6 scroll-reveal stagger-1">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-heading text-xl font-medium text-text-primary">Alertas</h3>
+                    <span class="bg-warning px-2 py-1 border-3 border-primary">
+                        <span class="font-mono text-xs font-semibold text-primary">3</span>
+                    </span>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Low Stock Alert -->
+                    <div class="bg-warning-light border-3 border-warning p-4">
+                        <div class="flex items-start gap-3">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E62E5C" stroke-width="2.5" class="flex-shrink-0 mt-1">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            <div>
+                                <h4 class="font-mono text-sm font-semibold text-warning-dark mb-1">Stock Bajo</h4>
+                                <p class="font-body text-xs text-text-secondary mb-2">3 productos requieren reabastecimiento</p>
+                                <button class="font-mono text-xs text-warning-dark hover:text-warning uppercase tracking-wide transition-colors duration-200">
+                                    Ver Detalles →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-success-light border-3 border-success p-4">
+                        <div class="flex items-start gap-3">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" class="flex-shrink-0 mt-1">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            <div>
+                                <h4 class="font-mono text-sm font-semibold text-success-dark mb-1">Nueva Venta</h4>
+                                <p class="font-body text-xs text-text-secondary mb-2">Pedido #1847 - $1,250.00 MXN</p>
+                                <button class="font-mono text-xs text-success-dark hover:text-success uppercase tracking-wide transition-colors duration-200">
+                                    Ver Pedido →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Activity -->
+                    <div class="bg-background border-3 border-border-light p-4">
+                        <div class="flex items-start gap-3">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.5" class="flex-shrink-0 mt-1">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <div>
+                                <h4 class="font-mono text-sm font-semibold text-text-primary mb-1">Nuevos Registros</h4>
+                                <p class="font-body text-xs text-text-secondary mb-2">5 clientes nuevos hoy</p>
+                                <button class="font-mono text-xs text-text-primary hover:text-accent uppercase tracking-wide transition-colors duration-200">
+                                    Ver Usuarios →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Orders Table -->
+        <section class="bg-surface border-3 border-primary shadow-editorial p-6 scroll-reveal">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-heading text-xl font-medium text-text-primary">Pedidos Recientes</h3>
+                <button class="font-mono text-xs text-accent hover:text-accent-hover uppercase tracking-wide transition-colors duration-200">
+                    Ver Todos →
+                </button>
+            </div>
+            
+            <!-- Desktop Table -->
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b-3 border-primary">
+                            <th class="font-mono text-xs text-text-secondary uppercase tracking-wide text-left py-3 px-4">Pedido</th>
+                            <th class="font-mono text-xs text-text-secondary uppercase tracking-wide text-left py-3 px-4">Cliente</th>
+                            <th class="font-mono text-xs text-text-secondary uppercase tracking-wide text-left py-3 px-4">Productos</th>
+                            <th class="font-mono text-xs text-text-secondary uppercase tracking-wide text-left py-3 px-4">Total</th>
+                            <th class="font-mono text-xs text-text-secondary uppercase tracking-wide text-left py-3 px-4">Fecha</th>
+                            <th class="font-mono text-xs text-text-secondary uppercase tracking-wide text-left py-3 px-4">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr class="border-b border-border-light hover:bg-background transition-colors duration-200">
+                            <td class="font-mono text-sm text-text-primary py-4 px-4">#1847</td>
+                            <td class="font-body text-sm text-text-primary py-4 px-4">María González</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">3 artículos</td>
+                            <td class="font-mono text-sm font-semibold text-text-primary py-4 px-4">$1,250.00</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">03/12/2025</td>
+                            <td class="py-4 px-4">
+                                <span class="inline-block bg-success-light text-success-dark px-3 py-1 border-3 border-success font-mono text-xs uppercase tracking-wide">
+                                    Completado
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="border-b border-border-light hover:bg-background transition-colors duration-200">
+                            <td class="font-mono text-sm text-text-primary py-4 px-4">#1846</td>
+                            <td class="font-body text-sm text-text-primary py-4 px-4">Carlos Ramírez</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">5 artículos</td>
+                            <td class="font-mono text-sm font-semibold text-text-primary py-4 px-4">$2,180.00</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">03/12/2025</td>
+                            <td class="py-4 px-4">
+                                <span class="inline-block bg-success-light text-success-dark px-3 py-1 border-3 border-success font-mono text-xs uppercase tracking-wide">
+                                    Completado
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="border-b border-border-light hover:bg-background transition-colors duration-200">
+                            <td class="font-mono text-sm text-text-primary py-4 px-4">#1845</td>
+                            <td class="font-body text-sm text-text-primary py-4 px-4">Ana Martínez</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">2 artículos</td>
+                            <td class="font-mono text-sm font-semibold text-text-primary py-4 px-4">$890.00</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">02/12/2025</td>
+                            <td class="py-4 px-4">
+                                <span class="inline-block bg-success-light text-success-dark px-3 py-1 border-3 border-success font-mono text-xs uppercase tracking-wide">
+                                    Completado
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="border-b border-border-light hover:bg-background transition-colors duration-200">
+                            <td class="font-mono text-sm text-text-primary py-4 px-4">#1844</td>
+                            <td class="font-body text-sm text-text-primary py-4 px-4">Luis Hernández</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">4 artículos</td>
+                            <td class="font-mono text-sm font-semibold text-text-primary py-4 px-4">$1,560.00</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">02/12/2025</td>
+                            <td class="py-4 px-4">
+                                <span class="inline-block bg-success-light text-success-dark px-3 py-1 border-3 border-success font-mono text-xs uppercase tracking-wide">
+                                    Completado
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-background transition-colors duration-200">
+                            <td class="font-mono text-sm text-text-primary py-4 px-4">#1843</td>
+                            <td class="font-body text-sm text-text-primary py-4 px-4">Patricia López</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">6 artículos</td>
+                            <td class="font-mono text-sm font-semibold text-text-primary py-4 px-4">$2,940.00</td>
+                            <td class="font-body text-sm text-text-secondary py-4 px-4">01/12/2025</td>
+                            <td class="py-4 px-4">
+                                <span class="inline-block bg-success-light text-success-dark px-3 py-1 border-3 border-success font-mono text-xs uppercase tracking-wide">
+                                    Completado
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Cards -->
+            <div class="md:hidden space-y-4" id="ordersCardContainer">
+                <div class="bg-background border-3 border-primary p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-mono text-sm font-semibold text-text-primary">#1847</span>
+                        <span class="bg-success-light text-success-dark px-2 py-1 border-3 border-success font-mono text-xs uppercase">
+                            Completado
+                        </span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Cliente:</span>
+                            <span class="font-body text-sm text-text-primary">María González</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Productos:</span>
+                            <span class="font-body text-sm text-text-primary">3 artículos</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Total:</span>
+                            <span class="font-mono text-sm font-semibold text-text-primary">$1,250.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Fecha:</span>
+                            <span class="font-body text-sm text-text-primary">03/12/2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-background border-3 border-primary p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-mono text-sm font-semibold text-text-primary">#1846</span>
+                        <span class="bg-success-light text-success-dark px-2 py-1 border-3 border-success font-mono text-xs uppercase">
+                            Completado
+                        </span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Cliente:</span>
+                            <span class="font-body text-sm text-text-primary">Carlos Ramírez</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Productos:</span>
+                            <span class="font-body text-sm text-text-primary">5 artículos</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Total:</span>
+                            <span class="font-mono text-sm font-semibold text-text-primary">$2,180.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Fecha:</span>
+                            <span class="font-body text-sm text-text-primary">03/12/2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-background border-3 border-primary p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-mono text-sm font-semibold text-text-primary">#1845</span>
+                        <span class="bg-success-light text-success-dark px-2 py-1 border-3 border-success font-mono text-xs uppercase">
+                            Completado
+                        </span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Cliente:</span>
+                            <span class="font-body text-sm text-text-primary">Ana Martínez</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Productos:</span>
+                            <span class="font-body text-sm text-text-primary">2 artículos</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Total:</span>
+                            <span class="font-mono text-sm font-semibold text-text-primary">$890.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-body text-sm text-text-secondary">Fecha:</span>
+                            <span class="font-body text-sm text-text-primary">02/12/2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary border-t-3 border-secondary-dark py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- Brand -->
+                <div>
+                    <h3 class="font-heading text-xl font-semibold text-secondary mb-4">LA DESESPERANZA</h3>
+                    <p class="font-body text-sm text-secondary-dark mb-4">
+                        Panel administrativo para gestión integral del negocio.
+                    </p>
+                    <div class="flex items-center gap-2 text-secondary-dark">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                        <span class="font-mono text-xs uppercase tracking-wide">Acceso Seguro</span>
+                    </div>
+                </div>
+                
+                <!-- Admin Links -->
+                <div>
+                    <h4 class="font-heading text-lg font-medium text-secondary mb-4">Administración</h4>
+                    <ul class="space-y-2">
+                        <li><a href="javascript:void(0)" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Gestión de Productos</a></li>
+                        <li><a href="javascript:void(0)" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Gestión de Usuarios</a></li>
+                        <li><a href="javascript:void(0)" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Reportes de Ventas</a></li>
+                        <li><a href="../product_catalog.html" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Ver Catálogo</a></li>
+                    </ul>
+                </div>
+                
+                <!-- System Info -->
+                <div>
+                    <h4 class="font-heading text-lg font-medium text-secondary mb-4">Sistema</h4>
+                    <ul class="space-y-2">
+                        <li class="font-body text-sm text-secondary-dark">Versión: 1.0.0</li>
+                        <li class="font-body text-sm text-secondary-dark">Última actualización: 03/12/2025</li>
+                        <li class="font-body text-sm text-secondary-dark">Estado: Operativo</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t-3 border-dashed border-secondary-dark pt-8">
+                <p class="font-mono text-sm text-secondary-dark text-center">
+                    © 2025 La Desesperanza. Todos los Derechos Reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-surface-overlay z-50 flex items-center justify-center">
+        <div class="bg-surface border-3 border-accent p-8 shadow-editorial-lg">
+            <div class="flex flex-col items-center gap-4">
+                <div class="animate-spin">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E8FF00" stroke-width="2.5">
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                    </svg>
+                </div>
+                <p class="font-mono text-sm text-text-primary uppercase tracking-wide">Actualizando datos...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const formatted = now.toLocaleString('es-MX', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('lastUpdate').textContent = formatted;
+        }
+
+        // Sales Chart
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                datasets: [{
+                    label: 'Ventas Diarias (MXN)',
+                    data: [8500, 12300, 9800, 15200, 11400, 13800, 10350],
+                    borderColor: '#E8FF00',
+                    backgroundColor: 'rgba(232, 255, 0, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#E8FF00',
+                    pointBorderColor: '#0A0A0A',
+                    pointBorderWidth: 3,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#0A0A0A',
+                        titleColor: '#FAFAF9',
+                        bodyColor: '#FAFAF9',
+                        borderColor: '#E8FF00',
+                        borderWidth: 3,
+                        padding: 12,
+                        displayColors: false,
+                        titleFont: {
+                            family: 'JetBrains Mono',
+                            size: 12,
+                            weight: '500'
+                        },
+                        bodyFont: {
+                            family: 'JetBrains Mono',
+                            size: 14,
+                            weight: '600'
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                return '$' + context.parsed.y.toLocaleString('es-MX', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }) + ' MXN';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#6B7280',
+                            font: {
+                                family: 'JetBrains Mono',
+                                size: 11
+                            },
+                            callback: function(value) {
+                                return '$' + (value / 1000) + 'k';
+                            }
+                        },
+                        grid: {
+                            color: '#E5E7EB',
+                            borderDash: [5, 5]
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#6B7280',
+                            font: {
+                                family: 'JetBrains Mono',
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Products Chart
+        const productsCtx = document.getElementById('productsChart').getContext('2d');
+        const productsChart = new Chart(productsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Pan de Muerto', 'Calaveras', 'Conchas', 'Empanadas', 'Galletas'],
+                datasets: [{
+                    label: 'Unidades Vendidas',
+                    data: [245, 189, 156, 142, 128],
+                    backgroundColor: [
+                        '#E8FF00',
+                        '#FF3366',
+                        '#3B82F6',
+                        '#10B981',
+                        '#F59E0B'
+                    ],
+                    borderColor: '#0A0A0A',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#0A0A0A',
+                        titleColor: '#FAFAF9',
+                        bodyColor: '#FAFAF9',
+                        borderColor: '#E8FF00',
+                        borderWidth: 3,
+                        padding: 12,
+                        displayColors: false,
+                        titleFont: {
+                            family: 'JetBrains Mono',
+                            size: 12,
+                            weight: '500'
+                        },
+                        bodyFont: {
+                            family: 'JetBrains Mono',
+                            size: 14,
+                            weight: '600'
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' unidades';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#6B7280',
+                            font: {
+                                family: 'JetBrains Mono',
+                                size: 11
+                            },
+                            stepSize: 50
+                        },
+                        grid: {
+                            color: '#E5E7EB',
+                            borderDash: [5, 5]
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#6B7280',
+                            font: {
+                                family: 'JetBrains Mono',
+                                size: 10
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Refresh Button
+        const refreshBtn = document.getElementById('refreshBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        refreshBtn.addEventListener('click', () => {
+            loadingOverlay.classList.remove('hidden');
+            
+            // Simulate data refresh
+            setTimeout(() => {
+                updateTimestamp();
+                
+                // Update random metrics
+                const totalSales = document.getElementById('totalSales');
+                const totalRevenue = document.getElementById('totalRevenue');
+                
+                const newSales = Math.floor(Math.random() * 100) + 800;
+                const newRevenue = (newSales * 85.5).toFixed(2);
+                
+                totalSales.textContent = newSales;
+                totalRevenue.textContent = '$' + parseFloat(newRevenue).toLocaleString('es-MX', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                
+                loadingOverlay.classList.add('hidden');
+            }, 1500);
+        });
+
+        // Date Filter
+        const dateFilter = document.getElementById('dateFilter');
+        dateFilter.addEventListener('change', (e) => {
+            console.log('Filter changed to:', e.target.value);
+            // In production, this would trigger data refresh based on selected period
+        });
+
+        // Export Functions
+        document.getElementById('exportSalesBtn').addEventListener('click', () => {
+            alert('Exportando datos de ventas...\n\nEn producción, esto generaría un archivo CSV o PDF con los datos del gráfico.');
+        });
+
+        document.getElementById('exportProductsBtn').addEventListener('click', () => {
+            alert('Exportando datos de productos...\n\nEn producción, esto generaría un archivo CSV o PDF con los datos del gráfico.');
+        });
+
+        // Logout Functions
+        function handleLogout() {
+            if (confirm('¿Está seguro que desea cerrar sesión?')) {
+                // In production, clear session and redirect
+                window.location.href = '../authentication.html';
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+        document.getElementById('mobileLogoutBtn').addEventListener('click', handleLogout);
+
+        // Initialize timestamp
+        updateTimestamp();
+
+        // Auto-refresh timestamp every minute
+        setInterval(updateTimestamp, 60000);
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
