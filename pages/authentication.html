@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Iniciar sesión o registrarse en La Desesperanza - Panadería exclusiva con productos artesanales del Día de Muertos">
+    <title>Autenticación - La Desesperanza</title>
+    <link rel="stylesheet" href="../css/main.css">
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fladesespe7587back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.10"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+  </head>
+<body class="bg-background min-h-screen">
+    <!-- Navigation Header -->
+    <header class="bg-primary border-b-3 border-primary sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="landing_page.html" class="flex items-center gap-3 hover-lift">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="48" height="48" fill="#E8FF00"/>
+                        <path d="M24 8L32 16H28V24H20V16H16L24 8Z" fill="#0A0A0A"/>
+                        <circle cx="24" cy="32" r="6" fill="#0A0A0A"/>
+                        <rect x="12" y="38" width="24" height="2" fill="#0A0A0A"/>
+                    </svg>
+                    <div>
+                        <h1 class="font-heading text-2xl font-semibold text-secondary tracking-tight">LA DESESPERANZA</h1>
+                        <p class="font-mono text-xs text-secondary-dark uppercase tracking-wider">Panadería Exclusiva</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="landing_page.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Inicio</a>
+                    <a href="product_catalog.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Catálogo</a>
+                    <a href="shopping_cart.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Carrito</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-secondary p-2" aria-label="Abrir menú de navegación">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t-3 border-secondary-dark pt-4">
+                <div class="flex flex-col gap-4">
+                    <a href="landing_page.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Inicio</a>
+                    <a href="product_catalog.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Catálogo</a>
+                    <a href="shopping_cart.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Carrito</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Authentication Section -->
+    <section class="py-12 md:py-20 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-5">
+            <img src="https://images.unsplash.com/photo-1552659089-2d77f79d0e13" 
+                 alt="Patrón decorativo del Día de Muertos con elementos tradicionales mexicanos" 
+                 class="w-full h-full object-cover"
+                 onerror="this.src='https://images.pexels.com/photos/3738388/pexels-photo-3738388.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'; this.onerror=null;">
+        </div>
+
+        <div class="container mx-auto px-4 relative">
+            <div class="max-w-2xl mx-auto">
+                <!-- Auth Container -->
+                <div class="bg-surface border-3 border-primary shadow-editorial-lg animate-fade-in">
+                    <!-- Header -->
+                    <div class="bg-primary p-6 border-b-3 border-primary">
+                        <h2 class="text-headline text-secondary text-center mb-2">Bienvenido</h2>
+                        <p class="font-body text-sm text-secondary-dark text-center">Accede a tu cuenta o crea una nueva para comenzar</p>
+                    </div>
+
+                    <!-- Tab Navigation -->
+                    <div class="flex border-b-3 border-primary">
+                        <button id="loginTab" class="flex-1 py-4 font-mono text-sm uppercase tracking-wide transition-all duration-200 bg-accent text-primary border-r-3 border-primary font-medium" aria-label="Cambiar a formulario de inicio de sesión">
+                            Iniciar Sesión
+                        </button>
+                        <button id="registerTab" class="flex-1 py-4 font-mono text-sm uppercase tracking-wide transition-all duration-200 bg-surface text-text-secondary hover:bg-background font-medium" aria-label="Cambiar a formulario de registro">
+                            Registrarse
+                        </button>
+                    </div>
+
+                    <!-- Forms Container -->
+                    <div class="p-8">
+                        <!-- Login Form -->
+                        <form id="loginForm" class="space-y-6">
+                            <div>
+                                <label for="loginEmail" class="block font-mono text-sm uppercase tracking-wide text-text-primary mb-2">
+                                    Email o Usuario
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="loginEmail" 
+                                    name="loginEmail"
+                                    class="input-editorial w-full"
+                                    placeholder="usuario@ejemplo.com"
+                                    required
+                                    aria-required="true"
+                                    aria-describedby="loginEmailError">
+                                <p id="loginEmailError" class="hidden font-body text-sm text-error mt-2" role="alert"></p>
+                            </div>
+
+                            <div>
+                                <label for="loginPassword" class="block font-mono text-sm uppercase tracking-wide text-text-primary mb-2">
+                                    Contraseña
+                                </label>
+                                <div class="relative">
+                                    <input 
+                                        type="password" 
+                                        id="loginPassword" 
+                                        name="loginPassword"
+                                        class="input-editorial w-full pr-12"
+                                        placeholder="••••••••"
+                                        required
+                                        aria-required="true"
+                                        aria-describedby="loginPasswordError">
+                                    <button 
+                                        type="button" 
+                                        id="toggleLoginPassword"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors"
+                                        aria-label="Mostrar u ocultar contraseña">
+                                        <svg id="loginEyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p id="loginPasswordError" class="hidden font-body text-sm text-error mt-2" role="alert"></p>
+                            </div>
+
+                            <!-- Remember Me & Forgot Password -->
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="rememberMe" class="w-4 h-4 border-3 border-primary accent-accent">
+                                    <span class="font-body text-sm text-text-secondary">Recordarme</span>
+                                </label>
+                                <a href="javascript:void(0)" class="font-body text-sm text-accent hover:text-accent-hover transition-colors">
+                                    ¿Olvidaste tu contraseña?
+                                </a>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button 
+                                type="submit" 
+                                id="loginSubmitBtn"
+                                class="btn-primary w-full flex items-center justify-center gap-2"
+                                aria-label="Iniciar sesión en tu cuenta">
+                                <span id="loginBtnText">Iniciar Sesión</span>
+                                <svg id="loginLoadingIcon" class="hidden animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                                </svg>
+                            </button>
+
+                            <!-- Success/Error Message -->
+                            <div id="loginMessage" class="hidden p-4 border-3 border-primary" role="alert"></div>
+                        </form>
+
+                        <!-- Register Form -->
+                        <form id="registerForm" class="hidden space-y-6">
+                            <div>
+                                <label for="registerUsername" class="block font-mono text-sm uppercase tracking-wide text-text-primary mb-2">
+                                    Nombre de Usuario
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="registerUsername" 
+                                    name="registerUsername"
+                                    class="input-editorial w-full"
+                                    placeholder="usuario123"
+                                    required
+                                    aria-required="true"
+                                    aria-describedby="registerUsernameError">
+                                <p id="registerUsernameError" class="hidden font-body text-sm text-error mt-2" role="alert"></p>
+                                <p class="font-body text-xs text-text-secondary mt-1">Mínimo 3 caracteres, solo letras, números y guiones bajos</p>
+                            </div>
+
+                            <div>
+                                <label for="registerEmail" class="block font-mono text-sm uppercase tracking-wide text-text-primary mb-2">
+                                    Email
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="registerEmail" 
+                                    name="registerEmail"
+                                    class="input-editorial w-full"
+                                    placeholder="usuario@ejemplo.com"
+                                    required
+                                    aria-required="true"
+                                    aria-describedby="registerEmailError">
+                                <p id="registerEmailError" class="hidden font-body text-sm text-error mt-2" role="alert"></p>
+                            </div>
+
+                            <div>
+                                <label for="registerEmailConfirm" class="block font-mono text-sm uppercase tracking-wide text-text-primary mb-2">
+                                    Confirmar Email
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="registerEmailConfirm" 
+                                    name="registerEmailConfirm"
+                                    class="input-editorial w-full"
+                                    placeholder="usuario@ejemplo.com"
+                                    required
+                                    aria-required="true"
+                                    aria-describedby="registerEmailConfirmError">
+                                <p id="registerEmailConfirmError" class="hidden font-body text-sm text-error mt-2" role="alert"></p>
+                            </div>
+
+                            <div>
+                                <label for="registerPassword" class="block font-mono text-sm uppercase tracking-wide text-text-primary mb-2">
+                                    Contraseña
+                                </label>
+                                <div class="relative">
+                                    <input 
+                                        type="password" 
+                                        id="registerPassword" 
+                                        name="registerPassword"
+                                        class="input-editorial w-full pr-12"
+                                        placeholder="••••••••"
+                                        required
+                                        aria-required="true"
+                                        aria-describedby="registerPasswordError passwordStrength">
+                                    <button 
+                                        type="button" 
+                                        id="toggleRegisterPassword"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors"
+                                        aria-label="Mostrar u ocultar contraseña">
+                                        <svg id="registerEyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p id="registerPasswordError" class="hidden font-body text-sm text-error mt-2" role="alert"></p>
+                                
+                                <!-- Password Strength Indicator -->
+                                <div id="passwordStrength" class="mt-3 space-y-2">
+                                    <div class="flex gap-1">
+                                        <div id="strength1" class="h-1 flex-1 bg-border-light transition-colors duration-200"></div>
+                                        <div id="strength2" class="h-1 flex-1 bg-border-light transition-colors duration-200"></div>
+                                        <div id="strength3" class="h-1 flex-1 bg-border-light transition-colors duration-200"></div>
+                                        <div id="strength4" class="h-1 flex-1 bg-border-light transition-colors duration-200"></div>
+                                    </div>
+                                    <p id="strengthText" class="font-body text-xs text-text-secondary">Mínimo 8 caracteres, incluye mayúsculas, minúsculas y números</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="registerPasswordConfirm" class="block font-mono text-sm uppercase tracking-wide text-text-primary mb-2">
+                                    Confirmar Contraseña
+                                </label>
+                                <div class="relative">
+                                    <input 
+                                        type="password" 
+                                        id="registerPasswordConfirm" 
+                                        name="registerPasswordConfirm"
+                                        class="input-editorial w-full pr-12"
+                                        placeholder="••••••••"
+                                        required
+                                        aria-required="true"
+                                        aria-describedby="registerPasswordConfirmError">
+                                    <button 
+                                        type="button" 
+                                        id="toggleRegisterPasswordConfirm"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors"
+                                        aria-label="Mostrar u ocultar confirmación de contraseña">
+                                        <svg id="registerConfirmEyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p id="registerPasswordConfirmError" class="hidden font-body text-sm text-error mt-2" role="alert"></p>
+                            </div>
+
+                            <!-- Terms & Conditions -->
+                            <div>
+                                <label class="flex items-start gap-3 cursor-pointer">
+                                    <input type="checkbox" id="acceptTerms" class="w-4 h-4 border-3 border-primary accent-accent mt-1" required aria-required="true">
+                                    <span class="font-body text-sm text-text-secondary">
+                                        Acepto los <a href="javascript:void(0)" class="text-accent hover:text-accent-hover transition-colors">términos y condiciones</a> y la <a href="javascript:void(0)" class="text-accent hover:text-accent-hover transition-colors">política de privacidad</a>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button 
+                                type="submit" 
+                                id="registerSubmitBtn"
+                                class="btn-primary w-full flex items-center justify-center gap-2"
+                                aria-label="Crear nueva cuenta">
+                                <span id="registerBtnText">Crear Cuenta</span>
+                                <svg id="registerLoadingIcon" class="hidden animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                                </svg>
+                            </button>
+
+                            <!-- Success/Error Message -->
+                            <div id="registerMessage" class="hidden p-4 border-3 border-primary" role="alert"></div>
+                        </form>
+                    </div>
+
+                    <!-- Footer Info -->
+                    <div class="bg-background p-6 border-t-3 border-dashed border-border-dashed">
+                        <div class="flex items-center justify-center gap-2 text-text-secondary">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                            <p class="font-body text-sm">Tus datos están protegidos con encriptación SSL</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="mt-8 text-center">
+                    <p class="font-body text-sm text-text-secondary mb-4">
+                        ¿Necesitas ayuda? <a href="javascript:void(0)" class="text-accent hover:text-accent-hover transition-colors">Contáctanos</a>
+                    </p>
+                    <a href="landing_page.html" class="inline-flex items-center gap-2 font-body text-sm text-text-secondary hover:text-text-primary transition-colors">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Volver al inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary border-t-3 border-secondary-dark py-12 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- Brand -->
+                <div>
+                    <h3 class="font-heading text-xl font-semibold text-secondary mb-4">LA DESESPERANZA</h3>
+                    <p class="font-body text-sm text-secondary-dark mb-4">
+                        Panadería exclusiva especializada en productos artesanales del Día de Muertos.
+                    </p>
+                    <div class="flex items-center gap-2 text-secondary-dark">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                        <span class="font-mono text-xs uppercase tracking-wide">Productos Certificados</span>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-heading text-lg font-medium text-secondary mb-4">Enlaces Rápidos</h4>
+                    <ul class="space-y-2">
+                        <li><a href="landing_page.html" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Inicio</a></li>
+                        <li><a href="product_catalog.html" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Catálogo</a></li>
+                        <li><a href="shopping_cart.html" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Carrito</a></li>
+                        <li><a href="admin_dashboard.html" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Administración</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 class="font-heading text-lg font-medium text-secondary mb-4">Contacto</h4>
+                    <ul class="space-y-2">
+                        <li class="font-body text-sm text-secondary-dark">Email: contacto@ladesesperanza.mx</li>
+                        <li class="font-body text-sm text-secondary-dark">Tel: +52 55 1234 5678</li>
+                        <li class="font-body text-sm text-secondary-dark">Horario: Lun-Dom 8:00-20:00</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t-3 border-dashed border-secondary-dark pt-8">
+                <p class="font-mono text-sm text-secondary-dark text-center">
+                    © 2025 La Desesperanza. Todos los Derechos Reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Tab Switching
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('bg-accent', 'text-primary', 'font-medium');
+            loginTab.classList.remove('bg-surface', 'text-text-secondary');
+            registerTab.classList.remove('bg-accent', 'text-primary', 'font-medium');
+            registerTab.classList.add('bg-surface', 'text-text-secondary');
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+        });
+
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('bg-accent', 'text-primary', 'font-medium');
+            registerTab.classList.remove('bg-surface', 'text-text-secondary');
+            loginTab.classList.remove('bg-accent', 'text-primary', 'font-medium');
+            loginTab.classList.add('bg-surface', 'text-text-secondary');
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        });
+
+        // Password Visibility Toggle
+        const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginEyeIcon = document.getElementById('loginEyeIcon');
+
+        toggleLoginPassword.addEventListener('click', () => {
+            const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            loginPassword.setAttribute('type', type);
+            
+            if (type === 'text') {
+                loginEyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+            } else {
+                loginEyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+            }
+        });
+
+        const toggleRegisterPassword = document.getElementById('toggleRegisterPassword');
+        const registerPassword = document.getElementById('registerPassword');
+        const registerEyeIcon = document.getElementById('registerEyeIcon');
+
+        toggleRegisterPassword.addEventListener('click', () => {
+            const type = registerPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            registerPassword.setAttribute('type', type);
+            
+            if (type === 'text') {
+                registerEyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+            } else {
+                registerEyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+            }
+        });
+
+        const toggleRegisterPasswordConfirm = document.getElementById('toggleRegisterPasswordConfirm');
+        const registerPasswordConfirm = document.getElementById('registerPasswordConfirm');
+        const registerConfirmEyeIcon = document.getElementById('registerConfirmEyeIcon');
+
+        toggleRegisterPasswordConfirm.addEventListener('click', () => {
+            const type = registerPasswordConfirm.getAttribute('type') === 'password' ? 'text' : 'password';
+            registerPasswordConfirm.setAttribute('type', type);
+            
+            if (type === 'text') {
+                registerConfirmEyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+            } else {
+                registerConfirmEyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+            }
+        });
+
+        // Password Strength Checker
+        registerPassword.addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strength1 = document.getElementById('strength1');
+            const strength2 = document.getElementById('strength2');
+            const strength3 = document.getElementById('strength3');
+            const strength4 = document.getElementById('strength4');
+            const strengthText = document.getElementById('strengthText');
+
+            let strength = 0;
+            
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+            // Reset all
+            [strength1, strength2, strength3, strength4].forEach(el => {
+                el.classList.remove('bg-error', 'bg-warning', 'bg-accent', 'bg-success');
+                el.classList.add('bg-border-light');
+            });
+
+            if (strength === 1) {
+                strength1.classList.remove('bg-border-light');
+                strength1.classList.add('bg-error');
+                strengthText.textContent = 'Contraseña débil';
+                strengthText.classList.add('text-error');
+            } else if (strength === 2) {
+                strength1.classList.remove('bg-border-light');
+                strength1.classList.add('bg-warning');
+                strength2.classList.remove('bg-border-light');
+                strength2.classList.add('bg-warning');
+                strengthText.textContent = 'Contraseña regular';
+                strengthText.classList.remove('text-error');
+                strengthText.classList.add('text-warning');
+            } else if (strength === 3) {
+                strength1.classList.remove('bg-border-light');
+                strength1.classList.add('bg-accent');
+                strength2.classList.remove('bg-border-light');
+                strength2.classList.add('bg-accent');
+                strength3.classList.remove('bg-border-light');
+                strength3.classList.add('bg-accent');
+                strengthText.textContent = 'Contraseña buena';
+                strengthText.classList.remove('text-warning');
+                strengthText.classList.add('text-accent');
+            } else if (strength === 4) {
+                [strength1, strength2, strength3, strength4].forEach(el => {
+                    el.classList.remove('bg-border-light');
+                    el.classList.add('bg-success');
+                });
+                strengthText.textContent = 'Contraseña excelente';
+                strengthText.classList.remove('text-accent');
+                strengthText.classList.add('text-success');
+            }
+        });
+
+        // Form Validation Functions
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            
+            setTimeout(() => {
+                errorElement.classList.add('hidden');
+            }, 5000);
+        }
+
+        function showMessage(elementId, message, isSuccess) {
+            const messageElement = document.getElementById(elementId);
+            messageElement.textContent = message;
+            messageElement.classList.remove('hidden', 'bg-success-light', 'bg-error-light', 'text-success-dark', 'text-error-dark');
+            
+            if (isSuccess) {
+                messageElement.classList.add('bg-success-light', 'text-success-dark');
+            } else {
+                messageElement.classList.add('bg-error-light', 'text-error-dark');
+            }
+            
+            setTimeout(() => {
+                messageElement.classList.add('hidden');
+            }, 5000);
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validateUsername(username) {
+            const re = /^[a-zA-Z0-9_]{3,20}$/;
+            return re.test(username);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8 && 
+                   /[a-z]/.test(password) && 
+                   /[A-Z]/.test(password) && 
+                   /[0-9]/.test(password);
+        }
+
+        // Login Form Submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const submitBtn = document.getElementById('loginSubmitBtn');
+            const btnText = document.getElementById('loginBtnText');
+            const loadingIcon = document.getElementById('loginLoadingIcon');
+
+            // Validation
+            if (!email) {
+                showError('loginEmailError', 'Por favor ingresa tu email o usuario');
+                return;
+            }
+
+            if (!password) {
+                showError('loginPasswordError', 'Por favor ingresa tu contraseña');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.textContent = 'Iniciando sesión...';
+            loadingIcon.classList.remove('hidden');
+
+            // Simulate API call
+            setTimeout(() => {
+                // Mock successful login
+                showMessage('loginMessage', '¡Inicio de sesión exitoso! Redirigiendo...', true);
+                
+                // Store mock session
+                localStorage.setItem('userSession', JSON.stringify({
+                    email: email,
+                    username: email.split('@')[0],
+                    loginTime: new Date().toISOString()
+                }));
+
+                // Redirect after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = 'product_catalog.html';
+                }, 1500);
+            }, 1500);
+        });
+
+        // Register Form Submission
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('registerUsername').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const emailConfirm = document.getElementById('registerEmailConfirm').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            const acceptTerms = document.getElementById('acceptTerms').checked;
+            const submitBtn = document.getElementById('registerSubmitBtn');
+            const btnText = document.getElementById('registerBtnText');
+            const loadingIcon = document.getElementById('registerLoadingIcon');
+
+            // Validation
+            let hasError = false;
+
+            if (!validateUsername(username)) {
+                showError('registerUsernameError', 'Usuario inválido. Usa 3-20 caracteres (letras, números, guiones bajos)');
+                hasError = true;
+            }
+
+            if (!validateEmail(email)) {
+                showError('registerEmailError', 'Por favor ingresa un email válido');
+                hasError = true;
+            }
+
+            if (email !== emailConfirm) {
+                showError('registerEmailConfirmError', 'Los emails no coinciden');
+                hasError = true;
+            }
+
+            if (!validatePassword(password)) {
+                showError('registerPasswordError', 'La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas y números');
+                hasError = true;
+            }
+
+            if (password !== passwordConfirm) {
+                showError('registerPasswordConfirmError', 'Las contraseñas no coinciden');
+                hasError = true;
+            }
+
+            if (!acceptTerms) {
+                showMessage('registerMessage', 'Debes aceptar los términos y condiciones', false);
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.textContent = 'Creando cuenta...';
+            loadingIcon.classList.remove('hidden');
+
+            // Simulate API call
+            setTimeout(() => {
+                // Mock successful registration
+                showMessage('registerMessage', '¡Cuenta creada exitosamente! Redirigiendo...', true);
+                
+                // Store mock session
+                localStorage.setItem('userSession', JSON.stringify({
+                    email: email,
+                    username: username,
+                    registrationTime: new Date().toISOString()
+                }));
+
+                // Redirect after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = 'product_catalog.html';
+                }, 1500);
+            }, 1500);
+        });
+
+        // Real-time validation for username
+        document.getElementById('registerUsername').addEventListener('blur', (e) => {
+            const username = e.target.value.trim();
+            if (username && !validateUsername(username)) {
+                showError('registerUsernameError', 'Usuario inválido. Usa 3-20 caracteres (letras, números, guiones bajos)');
+            }
+        });
+
+        // Real-time validation for email
+        document.getElementById('registerEmail').addEventListener('blur', (e) => {
+            const email = e.target.value.trim();
+            if (email && !validateEmail(email)) {
+                showError('registerEmailError', 'Por favor ingresa un email válido');
+            }
+        });
+
+        // Real-time validation for email confirmation
+        document.getElementById('registerEmailConfirm').addEventListener('blur', (e) => {
+            const email = document.getElementById('registerEmail').value.trim();
+            const emailConfirm = e.target.value.trim();
+            if (emailConfirm && email !== emailConfirm) {
+                showError('registerEmailConfirmError', 'Los emails no coinciden');
+            }
+        });
+
+        // Real-time validation for password confirmation
+        document.getElementById('registerPasswordConfirm').addEventListener('blur', (e) => {
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = e.target.value;
+            if (passwordConfirm && password !== passwordConfirm) {
+                showError('registerPasswordConfirmError', 'Las contraseñas no coinciden');
+            }
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
