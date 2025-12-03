@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Carrito de compras - La Desesperanza. Revisa y completa tu pedido de productos artesanales exclusivos del Día de Muertos.">
+    <title>Carrito de Compras - La Desesperanza</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="bg-background">
+    <!-- Navigation Header -->
+    <header class="bg-primary border-b-3 border-primary sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="landing_page.html" class="flex items-center gap-3 hover-lift">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="48" height="48" fill="#E8FF00"/>
+                        <path d="M24 8L32 16H28V24H20V16H16L24 8Z" fill="#0A0A0A"/>
+                        <circle cx="24" cy="32" r="6" fill="#0A0A0A"/>
+                        <rect x="12" y="38" width="24" height="2" fill="#0A0A0A"/>
+                    </svg>
+                    <div>
+                        <h1 class="font-heading text-2xl font-semibold text-secondary tracking-tight">LA DESESPERANZA</h1>
+                        <p class="font-mono text-xs text-secondary-dark uppercase tracking-wider">Panadería Exclusiva</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="product_catalog.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Catálogo</a>
+                    <a href="shopping_cart.html" class="font-body text-accent hover:text-accent-hover transition-colors duration-200 uppercase text-sm tracking-wide flex items-center gap-2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        Carrito
+                        <span id="cartBadge" class="bg-accent-cart text-primary font-mono text-xs px-2 py-1 border-2 border-primary">0</span>
+                    </a>
+                    <a href="authentication.html" class="btn-primary">Mi Cuenta</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-secondary p-2" aria-label="Abrir menú de navegación">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t-3 border-secondary-dark pt-4">
+                <div class="flex flex-col gap-4">
+                    <a href="product_catalog.html" class="font-body text-secondary hover:text-accent transition-colors duration-200 uppercase text-sm tracking-wide">Catálogo</a>
+                    <a href="shopping_cart.html" class="font-body text-accent hover:text-accent-hover transition-colors duration-200 uppercase text-sm tracking-wide flex items-center gap-2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        Carrito
+                    </a>
+                    <a href="authentication.html" class="btn-primary text-center">Mi Cuenta</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="bg-primary py-12 border-b-3 border-secondary-dark">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center gap-4 mb-4">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E8FF00" stroke-width="2.5">
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    <h2 class="text-headline text-secondary">Carrito de Compras</h2>
+                </div>
+                <p class="font-body text-secondary-dark max-w-2xl">
+                    Revisa tus productos seleccionados y completa tu pedido de productos artesanales exclusivos.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alert Messages -->
+    <div id="alertContainer" class="fixed top-24 right-4 z-50 space-y-4 max-w-md"></div>
+
+    <!-- Main Content -->
+    <section class="py-12 md:py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <!-- Empty Cart State -->
+                <div id="emptyCartState" class="hidden">
+                    <div class="bg-surface border-3 border-primary shadow-editorial-lg p-12 text-center">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" class="mx-auto mb-6">
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        <h3 class="font-heading text-2xl font-medium text-text-primary mb-4">Tu Carrito Está Vacío</h3>
+                        <p class="font-body text-text-secondary mb-8 max-w-md mx-auto">
+                            Explora nuestro catálogo exclusivo de productos artesanales del Día de Muertos y descubre sabores únicos.
+                        </p>
+                        <a href="product_catalog.html" class="btn-primary inline-block">
+                            Explorar Catálogo
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Cart Content -->
+                <div id="cartContent" class="grid lg:grid-cols-3 gap-8">
+                    <!-- Cart Items Section -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-surface border-3 border-primary shadow-editorial">
+                            <!-- Cart Header -->
+                            <div class="border-b-3 border-dashed border-border-dashed p-6">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-heading text-xl font-medium text-text-primary">Productos en tu Carrito</h3>
+                                    <button id="clearCartBtn" class="font-mono text-sm text-error hover:text-error-dark transition-colors duration-200 uppercase tracking-wide flex items-center gap-2">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="3 6 5 6 21 6"/>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                        </svg>
+                                        Vaciar Carrito
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Cart Items List -->
+                            <div id="cartItemsList" class="divide-y-3 divide-dashed divide-border-dashed">
+                                <!-- Cart items will be dynamically inserted here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary Section -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-surface border-3 border-primary shadow-editorial sticky top-24">
+                            <!-- Summary Header -->
+                            <div class="border-b-3 border-dashed border-border-dashed p-6">
+                                <h3 class="font-heading text-xl font-medium text-text-primary">Resumen del Pedido</h3>
+                            </div>
+
+                            <!-- Summary Content -->
+                            <div class="p-6 space-y-6">
+                                <!-- Account Balance -->
+                                <div class="bg-background p-4 border-3 border-primary">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-mono text-sm text-text-secondary uppercase tracking-wide">Saldo Disponible</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5">
+                                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                            <line x1="1" y1="10" x2="23" y2="10"/>
+                                        </svg>
+                                    </div>
+                                    <p id="accountBalance" class="font-mono text-2xl font-semibold text-success mb-3">$0.00 <span class="text-sm text-text-secondary">MXN</span></p>
+                                    <button id="addFundsBtn" class="w-full btn-secondary text-sm py-2">
+                                        Agregar Fondos
+                                    </button>
+                                </div>
+
+                                <!-- Price Breakdown -->
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-body text-text-secondary">Subtotal</span>
+                                        <span id="subtotalAmount" class="font-mono text-text-primary font-medium">$0.00 MXN</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-body text-text-secondary">IVA (16%)</span>
+                                        <span id="taxAmount" class="font-mono text-text-primary font-medium">$0.00 MXN</span>
+                                    </div>
+                                    <div class="border-t-3 border-dashed border-border-dashed pt-3">
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-heading text-lg font-medium text-text-primary">Total</span>
+                                            <span id="totalAmount" class="font-mono text-2xl font-semibold text-text-primary">$0.00 <span class="text-sm text-text-secondary">MXN</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Checkout Button -->
+                                <button id="checkoutBtn" class="w-full bg-accent-cart text-primary font-medium px-6 py-4 border-3 border-primary shadow-editorial hover-lift transition-all duration-200 font-body uppercase tracking-wide text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                                    Proceder al Pago
+                                </button>
+
+                                <!-- Continue Shopping -->
+                                <a href="product_catalog.html" class="block text-center font-body text-sm text-text-secondary hover:text-accent transition-colors duration-200 uppercase tracking-wide">
+                                    Continuar Comprando
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Funds Modal -->
+    <div id="addFundsModal" class="hidden fixed inset-0 bg-surface-overlay z-50 flex items-center justify-center p-4">
+        <div class="bg-surface border-3 border-primary shadow-editorial-lg max-w-md w-full animate-fade-in">
+            <div class="border-b-3 border-dashed border-border-dashed p-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-heading text-xl font-medium text-text-primary">Agregar Fondos</h3>
+                    <button id="closeAddFundsModal" class="text-text-secondary hover:text-text-primary transition-colors duration-200">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <form id="addFundsForm" class="p-6 space-y-6">
+                <div>
+                    <label for="fundsAmount" class="block font-mono text-sm text-text-secondary uppercase tracking-wide mb-2">Cantidad a Agregar</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 transform -translate-y-1/2 font-mono text-text-secondary">$</span>
+                        <input type="number" id="fundsAmount" name="fundsAmount" min="1" step="0.01" required
+                               class="input-editorial w-full pl-8" placeholder="0.00">
+                        <span class="absolute right-4 top-1/2 transform -translate-y-1/2 font-mono text-sm text-text-secondary">MXN</span>
+                    </div>
+                    <p class="font-body text-xs text-text-secondary mt-2">Monto mínimo: $1.00 MXN</p>
+                </div>
+
+                <!-- Quick Amount Buttons -->
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button" class="quick-amount-btn btn-secondary text-sm py-2" data-amount="100">$100</button>
+                    <button type="button" class="quick-amount-btn btn-secondary text-sm py-2" data-amount="500">$500</button>
+                    <button type="button" class="quick-amount-btn btn-secondary text-sm py-2" data-amount="1000">$1,000</button>
+                </div>
+
+                <button type="submit" class="w-full btn-primary">
+                    Confirmar Recarga
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary border-t-3 border-secondary-dark py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- Brand -->
+                <div>
+                    <h3 class="font-heading text-xl font-semibold text-secondary mb-4">LA DESESPERANZA</h3>
+                    <p class="font-body text-sm text-secondary-dark mb-4">
+                        Panadería exclusiva especializada en productos artesanales del Día de Muertos.
+                    </p>
+                    <div class="flex items-center gap-2 text-secondary-dark">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                        <span class="font-mono text-xs uppercase tracking-wide">Productos Certificados</span>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-heading text-lg font-medium text-secondary mb-4">Enlaces Rápidos</h4>
+                    <ul class="space-y-2">
+                        <li><a href="product_catalog.html" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Catálogo</a></li>
+                        <li><a href="shopping_cart.html" class="font-body text-sm text-accent hover:text-accent-hover transition-colors duration-200">Carrito</a></li>
+                        <li><a href="authentication.html" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Mi Cuenta</a></li>
+                        <li><a href="admin_dashboard.html" class="font-body text-sm text-secondary-dark hover:text-accent transition-colors duration-200">Administración</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 class="font-heading text-lg font-medium text-secondary mb-4">Contacto</h4>
+                    <ul class="space-y-2">
+                        <li class="font-body text-sm text-secondary-dark">Email: contacto@ladesesperanza.mx</li>
+                        <li class="font-body text-sm text-secondary-dark">Tel: +52 55 1234 5678</li>
+                        <li class="font-body text-sm text-secondary-dark">Horario: Lun-Dom 8:00-20:00</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t-3 border-dashed border-secondary-dark pt-8">
+                <p class="font-mono text-sm text-secondary-dark text-center">
+                    © 2025 La Desesperanza. Todos los Derechos Reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mock Data
+        const mockProducts = [
+            {
+                id: 1,
+                name: "Pan de Muerto Premium",
+                price: 85.00,
+                image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop",
+                imageAlt: "Pan de Muerto tradicional decorado con azúcar y huesos de masa",
+                stock: 15
+            },
+            {
+                id: 2,
+                name: "Calaveras de Azúcar",
+                price: 120.00,
+                image: "https://images.pexels.com/photos/1055272/pexels-photo-1055272.jpeg?auto=compress&cs=tinysrgb&w=400",
+                imageAlt: "Calaveras de azúcar decoradas con colores vibrantes y diseños tradicionales mexicanos",
+                stock: 8
+            },
+            {
+                id: 3,
+                name: "Conchas Especiales",
+                price: 45.00,
+                image: "https://images.unsplash.com/photo-1587241321921-91a834d82ffc?q=80&w=400&auto=format&fit=crop",
+                imageAlt: "Conchas mexicanas tradicionales con cobertura de azúcar en diferentes colores",
+                stock: 20
+            }
+        ];
+
+        // State Management
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let accountBalance = parseFloat(localStorage.getItem('accountBalance')) || 1500.00;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartDisplay();
+            updateAccountBalance();
+            setupEventListeners();
+        });
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Mobile menu
+            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                document.getElementById('mobileMenu').classList.toggle('hidden');
+            });
+
+            // Clear cart
+            document.getElementById('clearCartBtn').addEventListener('click', clearCart);
+
+            // Checkout
+            document.getElementById('checkoutBtn').addEventListener('click', processCheckout);
+
+            // Add funds modal
+            document.getElementById('addFundsBtn').addEventListener('click', () => {
+                document.getElementById('addFundsModal').classList.remove('hidden');
+            });
+
+            document.getElementById('closeAddFundsModal').addEventListener('click', () => {
+                document.getElementById('addFundsModal').classList.add('hidden');
+            });
+
+            // Quick amount buttons
+            document.querySelectorAll('.quick-amount-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const amount = e.target.dataset.amount;
+                    document.getElementById('fundsAmount').value = amount;
+                });
+            });
+
+            // Add funds form
+            document.getElementById('addFundsForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                addFunds();
+            });
+        }
+
+        // Update Cart Display
+        function updateCartDisplay() {
+            const cartContent = document.getElementById('cartContent');
+            const emptyCartState = document.getElementById('emptyCartState');
+            const cartItemsList = document.getElementById('cartItemsList');
+            const cartBadge = document.getElementById('cartBadge');
+
+            if (cart.length === 0) {
+                cartContent.classList.add('hidden');
+                emptyCartState.classList.remove('hidden');
+                cartBadge.textContent = '0';
+                return;
+            }
+
+            cartContent.classList.remove('hidden');
+            emptyCartState.classList.add('hidden');
+            cartBadge.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            cartItemsList.innerHTML = cart.map(item => {
+                const product = mockProducts.find(p => p.id === item.productId);
+                if (!product) return '';
+
+                const itemTotal = product.price * item.quantity;
+
+                return `
+                    <div class="p-6 hover:bg-background transition-colors duration-200">
+                        <div class="flex gap-4">
+                            <!-- Product Image -->
+                            <div class="w-24 h-24 flex-shrink-0 border-3 border-primary overflow-hidden">
+                                <img src="${product.image}" 
+                                     alt="${product.imageAlt}" 
+                                     class="w-full h-full object-cover"
+                                     onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=400&auto=format&fit=crop'; this.onerror=null;">
+                            </div>
+
+                            <!-- Product Details -->
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start justify-between gap-4 mb-3">
+                                    <div>
+                                        <h4 class="font-heading text-lg font-medium text-text-primary mb-1">${product.name}</h4>
+                                        <p class="font-mono text-sm text-text-secondary">$${product.price.toFixed(2)} MXN c/u</p>
+                                    </div>
+                                    <button onclick="removeFromCart(${item.productId})" 
+                                            class="text-error hover:text-error-dark transition-colors duration-200 p-2"
+                                            aria-label="Eliminar producto">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="3 6 5 6 21 6"/>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <!-- Quantity Controls -->
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="updateQuantity(${item.productId}, ${item.quantity - 1})" 
+                                                class="w-8 h-8 flex items-center justify-center bg-surface border-3 border-primary hover:bg-background transition-colors duration-200"
+                                                ${item.quantity <= 1 ? 'disabled' : ''}
+                                                aria-label="Disminuir cantidad">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                            </svg>
+                                        </button>
+                                        <span class="font-mono text-lg font-medium text-text-primary w-12 text-center">${item.quantity}</span>
+                                        <button onclick="updateQuantity(${item.productId}, ${item.quantity + 1})" 
+                                                class="w-8 h-8 flex items-center justify-center bg-surface border-3 border-primary hover:bg-background transition-colors duration-200"
+                                                ${item.quantity >= product.stock ? 'disabled' : ''}
+                                                aria-label="Aumentar cantidad">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <!-- Item Total -->
+                                    <div class="text-right">
+                                        <p class="font-mono text-xl font-semibold text-text-primary">$${itemTotal.toFixed(2)} <span class="text-sm text-text-secondary">MXN</span></p>
+                                        ${item.quantity >= product.stock ? '<p class="font-mono text-xs text-warning mt-1">Stock máximo</p>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateOrderSummary();
+        }
+
+        // Update Order Summary
+        function updateOrderSummary() {
+            const subtotal = cart.reduce((sum, item) => {
+                const product = mockProducts.find(p => p.id === item.productId);
+                return sum + (product ? product.price * item.quantity : 0);
+            }, 0);
+
+            const tax = subtotal * 0.16;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotalAmount').textContent = `$${subtotal.toFixed(2)} MXN`;
+            document.getElementById('taxAmount').textContent = `$${tax.toFixed(2)} MXN`;
+            document.getElementById('totalAmount').innerHTML = `$${total.toFixed(2)} <span class="text-sm text-text-secondary">MXN</span>`;
+
+            // Enable/disable checkout button
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if (total > accountBalance) {
+                checkoutBtn.disabled = true;
+                checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                checkoutBtn.disabled = false;
+                checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        // Update Account Balance Display
+        function updateAccountBalance() {
+            document.getElementById('accountBalance').innerHTML = `$${accountBalance.toFixed(2)} <span class="text-sm text-text-secondary">MXN</span>`;
+        }
+
+        // Update Quantity
+        function updateQuantity(productId, newQuantity) {
+            const product = mockProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            if (newQuantity < 1 || newQuantity > product.stock) {
+                showAlert('Cantidad no válida', 'error');
+                return;
+            }
+
+            const cartItem = cart.find(item => item.productId === productId);
+            if (cartItem) {
+                cartItem.quantity = newQuantity;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartDisplay();
+                showAlert('Cantidad actualizada', 'success');
+            }
+        }
+
+        // Remove from Cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.productId !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+            showAlert('Producto eliminado del carrito', 'success');
+        }
+
+        // Clear Cart
+        function clearCart() {
+            if (cart.length === 0) return;
+
+            if (confirm('¿Estás seguro de que deseas vaciar tu carrito?')) {
+                cart = [];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartDisplay();
+                showAlert('Carrito vaciado', 'success');
+            }
+        }
+
+        // Add Funds
+        function addFunds() {
+            const amount = parseFloat(document.getElementById('fundsAmount').value);
+
+            if (isNaN(amount) || amount < 1) {
+                showAlert('Por favor ingresa una cantidad válida (mínimo $1.00)', 'error');
+                return;
+            }
+
+            accountBalance += amount;
+            localStorage.setItem('accountBalance', accountBalance.toString());
+            updateAccountBalance();
+            updateOrderSummary();
+
+            document.getElementById('addFundsModal').classList.add('hidden');
+            document.getElementById('addFundsForm').reset();
+            showAlert(`$${amount.toFixed(2)} MXN agregados a tu cuenta`, 'success');
+        }
+
+        // Process Checkout
+        function processCheckout() {
+            if (cart.length === 0) {
+                showAlert('Tu carrito está vacío', 'error');
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => {
+                const product = mockProducts.find(p => p.id === item.productId);
+                return sum + (product ? product.price * item.quantity : 0);
+            }, 0);
+
+            const tax = subtotal * 0.16;
+            const total = subtotal + tax;
+
+            // Validate account balance
+            if (total > accountBalance) {
+                showAlert('Saldo insuficiente. Por favor agrega fondos a tu cuenta.', 'error');
+                return;
+            }
+
+            // Validate stock
+            for (const item of cart) {
+                const product = mockProducts.find(p => p.id === item.productId);
+                if (!product || item.quantity > product.stock) {
+                    showAlert(`Stock insuficiente para ${product ? product.name : 'producto'}`, 'error');
+                    return;
+                }
+            }
+
+            // Process purchase
+            accountBalance -= total;
+            localStorage.setItem('accountBalance', accountBalance.toString());
+
+            // Generate transaction number
+            const transactionNumber = 'TXN' + Date.now();
+
+            // Save purchase to history
+            const purchase = {
+                transactionNumber,
+                date: new Date().toISOString(),
+                items: cart.map(item => {
+                    const product = mockProducts.find(p => p.id === item.productId);
+                    return {
+                        productId: item.productId,
+                        name: product.name,
+                        price: product.price,
+                        quantity: item.quantity
+                    };
+                }),
+                subtotal,
+                tax,
+                total
+            };
+
+            const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+            purchaseHistory.push(purchase);
+            localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
+
+            // Clear cart
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            showAlert('¡Compra realizada con éxito!', 'success');
+
+            // Redirect to receipt page after delay
+            setTimeout(() => {
+                window.location.href = `authentication.html?transaction=${transactionNumber}`;
+            }, 1500);
+        }
+
+        // Show Alert
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertId = 'alert-' + Date.now();
+
+            const colors = {
+                success: 'bg-success-light border-success text-success-dark',
+                error: 'bg-error-light border-error text-error-dark',
+                warning: 'bg-warning-light border-warning text-warning-dark',
+                info: 'bg-accent-light border-accent text-primary'
+            };
+
+            const icons = {
+                success: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+                error: '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>',
+                warning: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+                info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
+            };
+
+            const alert = document.createElement('div');
+            alert.id = alertId;
+            alert.className = `${colors[type]} border-3 p-4 shadow-editorial animate-slide-up`;
+            alert.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="flex-shrink-0">
+                        ${icons[type]}
+                    </svg>
+                    <p class="font-body text-sm flex-1">${message}</p>
+                    <button onclick="document.getElementById('${alertId}').remove()" class="flex-shrink-0">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+
+            alertContainer.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+    </script>
+<script id="dhws-dataInjector" src="/public/dhws-data-injector.js"></script>
+</body>
+</html>
